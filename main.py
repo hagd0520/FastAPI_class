@@ -1,5 +1,4 @@
-from typing import Dict, List
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 
 
 app = FastAPI()
@@ -7,29 +6,29 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello, World!"}
+    return {"message": "Hello, FastAPI"}
 
 
-# @app.get("/items")
-# def read_items(skip = 0, limit = 10):
-#     return {"skip": skip, "limit": limit}
-
-
-# @app.get("/items/{item_id}")
-# def read_item(item_id: int):
-#     return {"item_id": item_id}
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    return {"item_id": item_id}
 
 
 @app.get("/items")
-async def read_items(q: List[int] = Query([])):
-    return {"q": q}
+def read_items(skip: int = 0, limit: int = 10):
+    return {"skip": skip, "limit": limit}
 
 
-@app.post("/create-item/")
-async def create_item(item: Dict[str, int]):
-    return item
+@app.post("/items")
+def create_item(item: dict):
+    return {"item": item}
 
 
-@app.get("/getdata")
-def read_items(data: str = "funcoding"):
-    return {"data": data}
+@app.put("/items/{item_id}")
+def update_item(item_id: int, items: dict):
+    return {"item_id": item_id, "updated_item": items}
+
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int):
+    return {"message": f"Item {item_id} has been deleted"}
