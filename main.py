@@ -1,26 +1,20 @@
-from fastapi import FastAPI
-from starlette.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
+from fastapi import FastAPI, Query
 
 
 app = FastAPI()
 
 
-@app.get("/json", response_class=JSONResponse)
-def read_json():
-    # JSON 은 기본값으로서 사용되기 때문에 큰 의미는 없다
-    return {"msg": "This is JSON"}
+# @app.get("/users")
+# def read_users(q: str = Query(None, max_length=50)):
+#     return {"q": q}
 
 
-@app.get("/html", response_class=HTMLResponse)
-def read_html():
-    return "<h1>This is HTML</h1>"
+@app.get("/items")
+def read_items(internal_query: str = Query(None, alias="search")):
+    return {"query_handled": internal_query}
 
 
-@app.get("/text", response_class=PlainTextResponse)
-def read_text():
-    return "This is Plain Text"
-
-
-@app.get("/redirect")
-def read_redirect():
-    return RedirectResponse(url="/text")
+@app.get("/users")
+def read_users(q: str = Query(None, deprecated=True)):
+    # 특정 쿼리 파라미터가 더이상 사용되지 않을 것임을 암시
+    return {"q": q}
