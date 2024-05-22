@@ -1,45 +1,19 @@
-from fastapi import Body, FastAPI
+from fastapi import FastAPI, HTTPException
 
 
 app = FastAPI()
 
-
-@app.post("/items")
-def create_item(item: dict = Body(...)):
-    return {"item": item}
-
-
-# @app.post("/advanced_items")
-# def create_advanced_item(item: dict = Body(
-#     default=None,
-#     example={"key": "value"},
-#     alias="item_alias",
-#     title="Sample Item",
-#     description="This is a sample item",
-#     deprecated=False
-# )):
-#     return {"item": item}
+# @app.get("/items/{item_id}")
+# def read_item(item_id: int):
+#     try:
+#         if item_id < 0:
+#             raise ValueError("음수는 허용되지 않습니다.")
+#     except ValueError as e:
+#         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/advanced_items")
-def create_advanced_item(
-    item: dict = Body(
-        default=None,
-        example={"key": "value"},
-        alias="item_alias",
-        title="Sample Item",
-        description="This is a sample item",
-        deprecated=False
-    ),
-    additional_info: dict = Body(
-        default=None,
-        example={"info_key": "info_value"},
-        title="Additional Info",
-        description="This is some additional information about the item",
-        deprecated=False
-    )
-):
-    return {
-        "item": item,
-        "additional_info": additional_info
-    }
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    if item_id == 42:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return {"item_id": item_id}
