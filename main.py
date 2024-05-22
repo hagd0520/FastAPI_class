@@ -1,52 +1,26 @@
-from typing import List, Union
 from fastapi import FastAPI
-from pydantic import BaseModel
+from starlette.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
 
 
 app = FastAPI()
 
-class Item(BaseModel):
-    name: str
-    description: str = None
-    price: float
-    
 
-def get_item_from_db(id):
-    # 매우 간단한 아이템 반환
-    return {
-        "name": "Simple Item",
-        "description": "A simple item description",
-        "price": 50.0,
-        "dis_pirce": 45.0
-    }
-    
-    
-@app.get("/items/{item_id}", response_model=Item)
-def read_item(item_id: int):
-    item = get_item_from_db(item_id)
-    return item
+@app.get("/json", response_class=JSONResponse)
+def read_json():
+    # JSON 은 기본값으로서 사용되기 때문에 큰 의미는 없다
+    return {"msg": "This is JSON"}
 
 
-class Cat(BaseModel):
-    name: str
-    
-    
-class Dog(BaseModel):
-    name: str
-    
-    
-@app.get("/animal", response_model=Cat)
-async def get_animal(animal: str):
-    if animal == "cat":
-        return Dog(name="Whiskers")
-    else:
-        return Dog(name="Fido")
-    
-    
-class Item2(BaseModel):
-    name: str
-    
-    
-@app.get("/items", response_model=List[Item2])
-async def get_items():
-    return [{"name": "Item 1"}, {"name": "Item 2"}]
+@app.get("/html", response_class=HTMLResponse)
+def read_html():
+    return "<h1>This is HTML</h1>"
+
+
+@app.get("/text", response_class=PlainTextResponse)
+def read_text():
+    return "This is Plain Text"
+
+
+@app.get("/redirect")
+def read_redirect():
+    return RedirectResponse(url="/text")
