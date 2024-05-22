@@ -6,26 +6,29 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/safe")
-def read_root_safe(request: Request):
-    my_variable_with_html = "<h1>Hello, FastAPI!</h1>"
-    return templates.TemplateResponse(
-        "index_with_safe.html",
-        {"request": request, "my_variable_with_html": my_variable_with_html}
-    )
-    
-
-@app.get("/")
-def read_root(request: Request):
+@app.get("/items")
+def read_items(request: Request):
+    my_items = ["apple", "banana", "cherry"]
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "my_variable": "Hello, FastAPI!"}
+        {"request": request, "items": my_items}
     )
     
     
-@app.get("/greet")
-def greeting(request: Request, time_of_day: str):
+@app.get("/dynamic_items")
+def dynamic_items(request: Request, item_list: str = ""):
+    items = item_list.split(",")
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "time_of_day": time_of_day}
+        {"request": request, "items": items}
     )
+    
+    
+@app.get("/inherit")
+def template_inherit(request: Request):
+    my_text = "FastAPI와 Jinja2를 이용한 예시입니다."
+    return templates.TemplateResponse(
+        "inherit.html",
+        {"request": request, "text": my_text}
+    )
+    

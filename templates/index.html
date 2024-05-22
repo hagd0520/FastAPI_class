@@ -2,22 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>FastAPI & Jinja2</title>
+    <title>FastAPI & Jinja2 with For Loop</title>
 </head>
 <body>
-    {{ my_variable }}
-    {#
-        이것은 주석입니다.
-        진저의 주석 처리 문법입니다.
-        이 부분은 아예 렌더링되지 않습니다.
-    #}
-
-    {% if time_of_day == "morning" %}
-        <h1>Good Morning!</h1>
-    {% elif time_of_day == "afternoon" %}
-        <h1>Good Afternoon!</h1>
-    {% else %}
-        <h1>Good Evening!</h1>
-    {% endif %}
+    <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
